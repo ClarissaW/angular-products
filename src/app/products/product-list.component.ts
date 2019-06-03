@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { IProduct } from "./product";
 import { ProductService } from "./product.service";
 @Component({
-  selector: "app-products",
+  // selector: "app-products", // use routing instead
   templateUrl: "./product-list.component.html",
   styleUrls: ["./product-list.component.css"]
 })
@@ -11,7 +11,7 @@ export class ProductListComponent implements OnInit {
   imageWidth: number = 50;
   imageMargin: number = 2;
   showImage: boolean = false;
-  errMessage: string ='';
+  errMessage: string = "";
   _listFilter: string;
 
   get listFilter(): string {
@@ -43,13 +43,12 @@ export class ProductListComponent implements OnInit {
         this.products = products;
         this.filteredProducts = this.products;
       },
-      error => this.errMessage = <any>error
+      error => (this.errMessage = <any>error)
     );
-    this.listFilter = '';
+    this.listFilter = "";
   }
 
-  
   onRatingClicked(message: string): void {
-    this.pageTitle = 'Product List ' + message;
+    this.pageTitle = "Product List " + message;
   }
 }
