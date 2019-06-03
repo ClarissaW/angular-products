@@ -11,6 +11,7 @@ export class ProductListComponent implements OnInit {
   imageWidth: number = 50;
   imageMargin: number = 2;
   showImage: boolean = false;
+  errMessage: string ='';
   _listFilter: string;
 
   get listFilter(): string {
@@ -24,30 +25,7 @@ export class ProductListComponent implements OnInit {
   }
   filteredProducts: IProduct[];
 
-  products: IProduct[] = [
-    {
-      productId: 1,
-      productName: "Leaf Rake",
-      productCode: "GDN-0011",
-      releaseDate: "March 19, 2016",
-      description: "Leaf rake with 48-inch wooden handle.",
-      price: 19.95,
-      starRating: 3.2,
-      imageUrl:
-        "http://bot-framework.azureedge.net/bot-icons-v1/Chatbots_AskMinDy_WebApp_D3n8m6FFmCMMCICCTC8zpCHFFbkDTUGFU71xAWOch5tKB5v.png"
-    },
-    {
-      productId: 2,
-      productName: "Garden Cart",
-      productCode: "GDN-0023",
-      releaseDate: "March 18, 2016",
-      description: "15 gallon capacity rolling garden cart",
-      price: 32.99,
-      starRating: 4.2,
-      imageUrl:
-        "https://openclipart.org/image/300px/svg_to_png/58471/garden_cart.png"
-    }
-  ];
+  products: IProduct[] = [];
   constructor(private productService: ProductService) {}
   performFilter(filterBy: string): IProduct[] {
     filterBy = filterBy.toLocaleLowerCase();
@@ -60,12 +38,18 @@ export class ProductListComponent implements OnInit {
     this.showImage = !this.showImage;
   }
   ngOnInit(): void {
-    this.products = this.productService.getProducts();
-    this.filteredProducts = this.products;
-    this.listFilter = "";
-    console.log("Hello from ngOnInit");
+    this.productService.getProducts().subscribe(
+      products => {
+        this.products = products;
+        this.filteredProducts = this.products;
+      },
+      error => this.errMessage = <any>error
+    );
+    this.listFilter = '';
   }
+
+  
   onRatingClicked(message: string): void {
-    this.pageTitle = "Product List " + message;
+    this.pageTitle = 'Product List ' + message;
   }
 }
